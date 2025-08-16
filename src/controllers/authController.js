@@ -2,11 +2,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/Users');
 
 exports.registerAdmin = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
+  const { email, password, role } = req.body;
+  if (!email || !password || !role) return res.status(400).json({ message: 'Email, password and role required' });
   const exists = await User.findOne({ email });
   if (exists) return res.status(400).json({ message: 'User exists' });
-  const user = new User({ email, password, role: 'admin' });
+  const user = new User({ email, password, role });
   await user.save();
   res.json({ message: 'Admin created', data: user });
 };

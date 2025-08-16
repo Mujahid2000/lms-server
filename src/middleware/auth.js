@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 exports.adminAuth = (req, res, next) => {
   const header = req.headers.authorization;
-  console.log(header)
+  // console.log(header)
   if (!header) return res.status(401).json({ message: 'No token' });
   const token = header;
   try {

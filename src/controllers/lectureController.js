@@ -1,10 +1,11 @@
 const lectureService = require('../services/lectureService');
 
 
+
 exports.createLecture = async (req, res) => {
   try {
     const { moduleId, title, duration, videoUrl } = req.body;
-
+// console.log("controller",moduleId, title, duration, videoUrl)
     if (!moduleId || !title) {
       return res
         .status(400)

@@ -1,23 +1,25 @@
 const Lecture = require('../models/Lecture');
 
 exports.createLecture = async (moduleId, payload) => {
-  // module ফিল্ড দিয়ে filter করো (moduleId নয়)
-  const last = await Lecture.find({ module: moduleId })
+  // console.log('lecture service',moduleId, payload)
+  // moduleId অনুযায়ী সর্বশেষ lecture খুঁজে বের করো
+  const last = await Lecture.find({ moduleId })
     .sort({ order: -1 })
     .limit(1);
-
+// console.log('check 1')
   const nextOrder = (last[0]?.order || 0) + 1;
-
+// console.log('check 2' , nextOrder)
   const lecture = new Lecture({
-    module: moduleId, // ⚡️ module field ব্যবহার করো, moduleId নয়
+    moduleId, // এখানে 그대로 থাকবে
     title: payload.title,
     videoUrl: payload.videoUrl,
     duration: payload.duration,
-    notes: payload.notes, // array
+    notes: payload.notes, 
     order: nextOrder,
   });
-
+// console.log('check 3')
   return lecture.save();
+  
 };
 
 

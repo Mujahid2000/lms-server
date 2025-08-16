@@ -1,16 +1,20 @@
 const Lecture = require('../models/Lecture');
 
 exports.createLecture = async (moduleId, payload) => {
-  const last = await Lecture.find({ moduleId }).sort({ order: -1 }).limit(1);
+  // module ফিল্ড দিয়ে filter করো (moduleId নয়)
+  const last = await Lecture.find({ module: moduleId })
+    .sort({ order: -1 })
+    .limit(1);
+
   const nextOrder = (last[0]?.order || 0) + 1;
 
   const lecture = new Lecture({
-    moduleId,
+    module: moduleId, // ⚡️ module field ব্যবহার করো, moduleId নয়
     title: payload.title,
     videoUrl: payload.videoUrl,
     duration: payload.duration,
-    notes: payload.notes, // now this is an array or a single string
-    order: nextOrder
+    notes: payload.notes, // array
+    order: nextOrder,
   });
 
   return lecture.save();

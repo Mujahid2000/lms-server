@@ -1,28 +1,37 @@
 const lectureService = require('../services/lectureService');
 
+const lectureService = require("../services/lectureService");
+
 exports.createLecture = async (req, res) => {
-  const { moduleId, title, duration, videoUrl } = req.body;
-// console.log(moduleId, title, duration, videoUrl)
-  if (!moduleId || !title) {
-    return res.status(400).json({ message: 'moduleId and title required' });
-  }
+  try {
+    const { moduleId, title, duration, videoUrl } = req.body;
 
-  let notes = [];
-
-  // Handle uploaded PDF notes
-    if (req.file) {
-      notes = req?.file?.path;
-      // console.log(thumbnail)
+    if (!moduleId || !title) {
+      return res
+        .status(400)
+        .json({ message: "moduleId and title are required" });
     }
 
-  const lecture = await lectureService.createLecture(
-    moduleId,
-    { title, videoUrl, duration, notes }
-  );
+    let notes = [];
 
-  res.status(201).json(lecture);
+    // Handle uploaded PDF notes (single or multiple files)
+    if (req.file) { 
+      notes = req?.file?.path;
+     }
+      // console.log(thumbnail) }
+
+    const lecture = await lectureService.createLecture(moduleId, {
+      title,
+      videoUrl,
+      duration,
+      notes,
+    });
+
+    res.status(201).json(lecture);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
-
 
 exports.listLecturesByModule = async (req, res) => {
   const lectures = await lectureService.getLecturesByModule(req.params.id);

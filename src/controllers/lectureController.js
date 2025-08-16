@@ -1,6 +1,5 @@
 const lectureService = require('../services/lectureService');
 
-const lectureService = require("../services/lectureService");
 
 exports.createLecture = async (req, res) => {
   try {
